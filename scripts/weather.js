@@ -1,18 +1,39 @@
-const key = 'Q2Xg6AwqT58g0xd0yyeUBKU1Mnrevh0b'
+const key = '2jUlQjhoWj1XdgiGmAqIJSPh3EZiW8AH'
 
+//get weather information
+const getWeather = async(id) => { //id is key from getcity
+    const base = 'http://dataservice.accuweather.com/currentconditions/v1/'
+
+    const query = `${id}?apikey=${key}`;
+
+    const response = await fetch(base + query);
+
+    const data =await response.json();
+
+    return data[0];
+
+}
+
+//get city info 
 const getCity = async(city) => 
 {
 
 
     const base = 'http://dataservice.accuweather.com/locations/v1/cities/search';
     
-    const query = `?apikey${key}&q=${city}`
+    const query = `?apikey=${key}&q=${city}`
 
     const response = await fetch(base + query);
 
     const data = await response.json();
-    console.log(data);
+    return data[0];
 
 
 };
-getCity('rohtak');
+getCity('rohtak')
+ .then(data =>{
+     return getWeather(data.Key)
+ } ).then(data =>{
+    console.log(data)}) // data from getWeather
+ .catch(err => console.log(err));
+
